@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  db:
+    image: percona:ps-5.7 
+    restart: always
+    container_name: quilting-ninja-db
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: y0u_sh@ll_n07_pass 
+      MYSQL_DATABASE: quiltninja
+      MYSQL_USER: kbice
+      MYSQL_PASSWORD: Test!2#4%
+    
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+    - 8080:8080
+
+  nginx:
+    image: nginx:latest
+    restart: on-failure
+    depends_on:
+      - python
+    ports:
+      - 8443:443
+
+  python:
+    build: .
+    ports: 
+    - 5000:5000 
+    depends_on:
+      - db
+    image: quilting-ninja
